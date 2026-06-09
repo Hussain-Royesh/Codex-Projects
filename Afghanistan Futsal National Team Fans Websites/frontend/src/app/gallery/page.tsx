@@ -19,12 +19,12 @@ export default function GalleryPage() {
         }}
       />
 
-      <section className="mx-auto w-[min(1180px,calc(100%-32px))] pb-24">
+      <section className="page-shell pb-24 pt-12">
         <SectionHeader
           eyebrow={{ en: "Gallery", fa: "گالری" }}
           title={{ en: "Moments with space to breathe", fa: "لحظه‌ها با فضای کافی" }}
         />
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {galleryItems.map((item) => (
             <GalleryCard key={item.id} item={item} />
           ))}

@@ -19,7 +19,7 @@ export default function FixturesPage() {
         }}
       />
 
-      <section className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-5 pb-20 lg:grid-cols-[0.8fr_1.2fr]">
+      <section className="page-shell grid gap-5 pb-20 pt-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeader
             eyebrow={{ en: "Upcoming", fa: "پیش‌رو" }}
@@ -33,8 +33,8 @@ export default function FixturesPage() {
         <DynamicMatchCards initialMatches={matches} />
       </section>
 
-      <section className="bg-[var(--page-soft)] py-20">
-        <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+      <section className="section-band section-pad">
+        <div className="page-shell">
           <DynamicFixtureTable initialMatches={matches} />
         </div>
       </section>

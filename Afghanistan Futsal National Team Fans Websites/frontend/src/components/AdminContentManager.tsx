@@ -50,6 +50,26 @@ const emptyMatch: MatchForm = {
   note: ""
 };
 
+function sortPlayersByDisplayOrder(players: ContentPlayer[]) {
+  return [...players].sort((a, b) => a.jerseyNumber - b.jerseyNumber);
+}
+
+function sortMatchesByKickoff(matches: ContentMatch[]) {
+  return [...matches].sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
+}
+
+function upsertById<T extends { id: string }>(items: T[], item: T) {
+  const index = items.findIndex((currentItem) => currentItem.id === item.id);
+
+  if (index === -1) {
+    return [...items, item];
+  }
+
+  const nextItems = [...items];
+  nextItems[index] = item;
+  return nextItems;
+}
+
 export function AdminContentManager({ token }: { token: string }) {
   const [activeTab, setActiveTab] = useState<Tab>("matches");
   const [players, setPlayers] = useState<ContentPlayer[]>([]);
@@ -71,12 +91,12 @@ export function AdminContentManager({ token }: { token: string }) {
 
     try {
       const [playersResult, matchesResult] = await Promise.all([
-        fetchPlayers(),
-        fetchMatches()
+        fetchPlayers({ dedupe: false }),
+        fetchMatches({ dedupe: false })
       ]);
 
-      setPlayers(playersResult.players);
-      setMatches(matchesResult.matches);
+      setPlayers(sortPlayersByDisplayOrder(playersResult.players));
+      setMatches(sortMatchesByKickoff(matchesResult.matches));
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Unable to load content.");
     } finally {
@@ -91,15 +111,16 @@ export function AdminContentManager({ token }: { token: string }) {
 
     try {
       if (editingPlayerId) {
-        await updatePlayer(token, editingPlayerId, playerForm);
+        const result = await updatePlayer(token, editingPlayerId, playerForm);
+        setPlayers((current) => sortPlayersByDisplayOrder(upsertById(current, result.player)));
         setNotice("Player updated successfully.");
       } else {
-        await createPlayer(token, playerForm);
+        const result = await createPlayer(token, playerForm);
+        setPlayers((current) => sortPlayersByDisplayOrder([...current, result.player]));
         setNotice("Player added successfully.");
       }
 
       resetPlayerForm();
-      await loadContent();
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Unable to save player.");
     } finally {
@@ -114,15 +135,16 @@ export function AdminContentManager({ token }: { token: string }) {
 
     try {
       if (editingMatchId) {
-        await updateMatch(token, editingMatchId, matchForm);
+        const result = await updateMatch(token, editingMatchId, matchForm);
+        setMatches((current) => sortMatchesByKickoff(upsertById(current, result.match)));
         setNotice("Match updated successfully.");
       } else {
-        await createMatch(token, matchForm);
+        const result = await createMatch(token, matchForm);
+        setMatches((current) => sortMatchesByKickoff([...current, result.match]));
         setNotice("Match added successfully.");
       }
 
       resetMatchForm();
-      await loadContent();
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Unable to save match.");
     } finally {
@@ -164,9 +186,13 @@ export function AdminContentManager({ token }: { token: string }) {
       return;
     }
 
-    await deletePlayer(token, player.id);
-    setNotice("Player deleted.");
-    await loadContent();
+    try {
+      await deletePlayer(token, player.id);
+      setPlayers((current) => current.filter((currentPlayer) => currentPlayer.id !== player.id));
+      setNotice("Player deleted.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Unable to delete player.");
+    }
   }
 
   async function removeMatch(match: ContentMatch) {
@@ -174,9 +200,13 @@ export function AdminContentManager({ token }: { token: string }) {
       return;
     }
 
-    await deleteMatch(token, match.id);
-    setNotice("Match deleted.");
-    await loadContent();
+    try {
+      await deleteMatch(token, match.id);
+      setMatches((current) => current.filter((currentMatch) => currentMatch.id !== match.id));
+      setNotice("Match deleted.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Unable to delete match.");
+    }
   }
 
   function resetPlayerForm() {
@@ -193,7 +223,7 @@ export function AdminContentManager({ token }: { token: string }) {
 
   return (
     <section className="space-y-5">
-      <div className="admin-panel rounded-3xl p-5 md:p-7">
+      <div className="admin-panel rounded-lg p-5 md:p-7">
         <div className="grid gap-5 xl:grid-cols-[1fr_auto] xl:items-end">
           <div>
             <p className="eyebrow mb-3">Content manager</p>
@@ -229,7 +259,7 @@ export function AdminContentManager({ token }: { token: string }) {
         </div>
 
         {notice ? (
-          <p className="mt-5 rounded-2xl border border-[var(--line)] bg-[var(--field-bg)] p-4 text-sm font-semibold light-text">
+          <p className="mt-5 rounded-md border border-[var(--line)] bg-[var(--field-bg)] p-4 text-sm font-semibold light-text">
             {notice}
           </p>
         ) : null}
@@ -296,7 +326,7 @@ function TabButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "tab-control flex min-h-16 items-center justify-between rounded-2xl border border-[var(--line)] px-5 text-left transition hover:border-[var(--line-strong)]",
+        "tab-control flex min-h-16 items-center justify-between rounded-md border border-[var(--line)] px-5 text-left transition hover:border-[var(--line-strong)]",
         active && "tab-control-active"
       )}
     >
@@ -327,7 +357,7 @@ function PlayerFormPanel({
   setForm: (form: PlayerForm) => void;
 }) {
   return (
-    <form onSubmit={onSubmit} className="admin-panel rounded-3xl p-5 md:p-6">
+    <form onSubmit={onSubmit} className="admin-panel rounded-lg p-5 md:p-6">
       <FormTitle title={isEditing ? "Edit player" : "Add player"} />
       <Input label="Name" value={form.name} onChange={(name) => setForm({ ...form, name })} required />
       <Input label="Position" value={form.position} onChange={(position) => setForm({ ...form, position })} />
@@ -369,7 +399,7 @@ function MatchFormPanel({
   setForm: (form: MatchForm) => void;
 }) {
   return (
-    <form onSubmit={onSubmit} className="admin-panel rounded-3xl p-5 md:p-6">
+    <form onSubmit={onSubmit} className="admin-panel rounded-lg p-5 md:p-6">
       <FormTitle title={isEditing ? "Edit match" : "Add match"} />
       <div className="grid gap-3 md:grid-cols-2">
         <Input label="Date" type="date" value={form.date} onChange={(date) => setForm({ ...form, date })} required />
@@ -407,13 +437,13 @@ function PlayerList({
   total: number;
 }) {
   return (
-    <div className="admin-panel rounded-3xl p-5 md:p-6">
+    <div className="admin-panel rounded-lg p-5 md:p-6">
       <ListHeader count={total} title="Players" />
       <div className="grid gap-3">
         {isLoading ? <EmptyState text="Loading players..." /> : null}
         {!isLoading && players.length === 0 ? <EmptyState text="No players yet." /> : null}
         {players.map((player) => (
-          <div key={player.id} className="admin-row rounded-2xl p-4">
+          <div key={player.id} className="admin-row rounded-md p-4">
             <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
                 <p className="font-display text-xl font-black light-text">
@@ -446,13 +476,13 @@ function MatchList({
   total: number;
 }) {
   return (
-    <div className="admin-panel rounded-3xl p-5 md:p-6">
+    <div className="admin-panel rounded-lg p-5 md:p-6">
       <ListHeader count={total} title="Matches" />
       <div className="grid gap-3">
         {isLoading ? <EmptyState text="Loading matches..." /> : null}
         {!isLoading && matches.length === 0 ? <EmptyState text="No matches yet." /> : null}
         {matches.map((match) => (
-          <div key={match.id} className="admin-row rounded-2xl p-4">
+          <div key={match.id} className="admin-row rounded-md p-4">
             <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
                 <div className="mb-2 flex flex-wrap gap-2">
@@ -605,7 +635,7 @@ function RowActions({ onDelete, onEdit }: { onDelete: () => Promise<void>; onEdi
 
 function EmptyState({ text }: { text: string }) {
   return (
-    <div className="admin-row rounded-2xl p-5 text-sm font-semibold muted-text">
+    <div className="admin-row rounded-md p-5 text-sm font-semibold muted-text">
       {text}
     </div>
   );

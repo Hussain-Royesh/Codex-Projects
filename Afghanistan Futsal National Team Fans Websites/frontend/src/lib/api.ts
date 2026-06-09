@@ -44,8 +44,41 @@ export type ContentMatch = {
 const apiBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/\/$/, "") ?? "http://127.0.0.1:4000/api";
 
-async function readJson<T>(response: Response): Promise<T> {
-  const data = (await response.json()) as T & { message?: string };
+type ApiRequestOptions = {
+  body?: unknown;
+  cache?: RequestCache;
+  headers?: HeadersInit;
+  method?: string;
+  token?: string;
+};
+
+const pendingPublicRequests = new Map<string, Promise<unknown>>();
+
+async function apiRequest<T>(path: string, options: ApiRequestOptions = {}): Promise<T> {
+  const headers = new Headers(options.headers);
+
+  if (options.token) {
+    headers.set("Authorization", `Bearer ${options.token}`);
+  }
+
+  const requestInit: RequestInit = {
+    cache: options.cache,
+    headers,
+    method: options.method ?? (options.body ? "POST" : "GET")
+  };
+
+  if (options.body !== undefined) {
+    headers.set("Content-Type", "application/json");
+    requestInit.body = JSON.stringify(options.body);
+  }
+
+  const response = await fetch(`${apiBaseUrl}${path}`, requestInit);
+
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  const data = (await response.json().catch(() => ({}))) as T & { message?: string };
 
   if (!response.ok) {
     throw new Error(data.message || "API request failed");
@@ -54,54 +87,52 @@ async function readJson<T>(response: Response): Promise<T> {
   return data;
 }
 
-export async function login(email: string, password: string) {
-  const response = await fetch(`${apiBaseUrl}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, password })
+function fetchPublicResource<T>(path: string) {
+  const pending = pendingPublicRequests.get(path) as Promise<T> | undefined;
+
+  if (pending) {
+    return pending;
+  }
+
+  const request = apiRequest<T>(path, { cache: "no-store" }).finally(() => {
+    pendingPublicRequests.delete(path);
   });
 
-  return readJson<LoginResponse>(response);
+  pendingPublicRequests.set(path, request);
+  return request;
+}
+
+export async function login(email: string, password: string) {
+  return apiRequest<LoginResponse>("/auth/login", {
+    body: { email, password },
+    method: "POST"
+  });
 }
 
 export async function getCurrentUser(token: string) {
-  const response = await fetch(`${apiBaseUrl}/auth/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+  return apiRequest<{ user: AuthUser }>("/auth/me", {
+    token
   });
-
-  return readJson<{ user: AuthUser }>(response);
 }
 
 export async function getDashboard(path: "/admin/dashboard" | "/editor/dashboard", token: string) {
-  const response = await fetch(`${apiBaseUrl}${path}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+  return apiRequest<DashboardResponse>(path, {
+    token
   });
-
-  return readJson<DashboardResponse>(response);
 }
 
-export async function fetchPlayers() {
-  const response = await fetch(`${apiBaseUrl}/players`, {
-    cache: "no-store"
-  });
-
-  return readJson<{ players: ContentPlayer[] }>(response);
+export async function fetchPlayers({ dedupe = true } = {}) {
+  return dedupe
+    ? fetchPublicResource<{ players: ContentPlayer[] }>("/players")
+    : apiRequest<{ players: ContentPlayer[] }>("/players", { cache: "no-store" });
 }
 
 export async function createPlayer(token: string, player: Omit<ContentPlayer, "id">) {
-  const response = await fetch(`${apiBaseUrl}/players`, {
+  return apiRequest<{ player: ContentPlayer }>("/players", {
+    body: player,
     method: "POST",
-    headers: authJsonHeaders(token),
-    body: JSON.stringify(player)
+    token
   });
-
-  return readJson<{ player: ContentPlayer }>(response);
 }
 
 export async function updatePlayer(
@@ -109,72 +140,45 @@ export async function updatePlayer(
   id: string,
   player: Omit<ContentPlayer, "id">
 ) {
-  const response = await fetch(`${apiBaseUrl}/players/${id}`, {
+  return apiRequest<{ player: ContentPlayer }>(`/players/${id}`, {
+    body: player,
     method: "PUT",
-    headers: authJsonHeaders(token),
-    body: JSON.stringify(player)
+    token
   });
-
-  return readJson<{ player: ContentPlayer }>(response);
 }
 
 export async function deletePlayer(token: string, id: string) {
-  const response = await fetch(`${apiBaseUrl}/players/${id}`, {
+  return apiRequest<void>(`/players/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+    token
   });
-
-  if (!response.ok) {
-    await readJson(response);
-  }
 }
 
-export async function fetchMatches() {
-  const response = await fetch(`${apiBaseUrl}/matches`, {
-    cache: "no-store"
-  });
-
-  return readJson<{ matches: ContentMatch[] }>(response);
+export async function fetchMatches({ dedupe = true } = {}) {
+  return dedupe
+    ? fetchPublicResource<{ matches: ContentMatch[] }>("/matches")
+    : apiRequest<{ matches: ContentMatch[] }>("/matches", { cache: "no-store" });
 }
 
 export async function createMatch(token: string, match: Omit<ContentMatch, "id">) {
-  const response = await fetch(`${apiBaseUrl}/matches`, {
+  return apiRequest<{ match: ContentMatch }>("/matches", {
+    body: match,
     method: "POST",
-    headers: authJsonHeaders(token),
-    body: JSON.stringify(match)
+    token
   });
-
-  return readJson<{ match: ContentMatch }>(response);
 }
 
 export async function updateMatch(token: string, id: string, match: Omit<ContentMatch, "id">) {
-  const response = await fetch(`${apiBaseUrl}/matches/${id}`, {
+  return apiRequest<{ match: ContentMatch }>(`/matches/${id}`, {
+    body: match,
     method: "PUT",
-    headers: authJsonHeaders(token),
-    body: JSON.stringify(match)
+    token
   });
-
-  return readJson<{ match: ContentMatch }>(response);
 }
 
 export async function deleteMatch(token: string, id: string) {
-  const response = await fetch(`${apiBaseUrl}/matches/${id}`, {
+  return apiRequest<void>(`/matches/${id}`, {
     method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
+    token
   });
-
-  if (!response.ok) {
-    await readJson(response);
-  }
-}
-
-function authJsonHeaders(token: string) {
-  return {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json"
-  };
 }

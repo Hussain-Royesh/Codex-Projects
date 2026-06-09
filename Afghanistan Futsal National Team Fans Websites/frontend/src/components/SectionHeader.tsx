@@ -19,7 +19,7 @@ export function SectionHeader({
       <p className="eyebrow mb-3">
         <LocalizedText value={eyebrow} />
       </p>
-      <h2 className="font-display text-3xl font-black leading-tight light-text md:text-4xl">
+      <h2 className="font-display text-3xl font-black leading-tight light-text md:text-[2.65rem]">
         <LocalizedText value={title} />
       </h2>
       {summary ? (

@@ -25,10 +25,10 @@ export function SiteHeader() {
   }, [pathname]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[var(--nav)] backdrop-blur-2xl">
-      <nav className="mx-auto flex min-h-20 w-[min(1180px,calc(100%-32px))] items-center justify-between gap-4">
+    <header className="fixed inset-x-0 top-0 z-50 px-0 py-3">
+      <nav className="nav-surface page-shell flex min-h-16 items-center justify-between gap-4 rounded-lg px-3 md:px-4">
         <Link href="/" className="group flex items-center gap-3" aria-label={brandName[locale]}>
-          <span className="relative grid size-11 place-items-center overflow-hidden rounded-full border border-white/15 bg-ink-950 font-mono text-sm font-black text-white shadow-lift">
+          <span className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-md border border-[var(--line)] bg-ink-950 font-mono text-sm font-black text-white shadow-lift">
             <span className="absolute inset-x-0 top-0 h-1.5 bg-afghan-red" />
             <span className="absolute inset-x-0 bottom-0 h-1.5 bg-afghan-green" />
             AF
@@ -66,9 +66,9 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "rounded-full px-4 py-2 transition hover:bg-white/10",
+                  "rounded-md px-3 py-2 transition hover:bg-[var(--surface-strong)]",
                   navTextClass,
-                  isActive ? "bg-white/10 light-text" : "muted-text"
+                  isActive ? "bg-[var(--text)] text-[var(--page-bg)]" : "muted-text"
                 )}
               >
                 {item.label[locale]}
@@ -81,7 +81,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="grid size-10 place-items-center rounded-full border border-white/15 bg-white/10 light-text transition hover:-translate-y-0.5 hover:bg-white/15"
+            className="grid size-10 place-items-center rounded-md border border-[var(--line)] bg-[var(--surface)] light-text transition hover:-translate-y-0.5 hover:bg-[var(--surface-strong)]"
             aria-label={ui("theme")}
           >
             {theme === "dark" ? <Moon size={18} /> : <Sun size={18} />}
@@ -90,7 +90,7 @@ export function SiteHeader() {
             type="button"
             onClick={toggleLocale}
             className={cn(
-              "hidden h-10 items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 light-text transition hover:-translate-y-0.5 hover:bg-white/15 sm:flex",
+              "hidden h-10 items-center gap-2 rounded-md border border-[var(--line)] bg-[var(--surface)] px-3 light-text transition hover:-translate-y-0.5 hover:bg-[var(--surface-strong)] sm:flex",
               controlTextClass
             )}
             aria-label={ui("language")}
@@ -101,7 +101,7 @@ export function SiteHeader() {
           <Link
             href="/admin"
             className={cn(
-              "hidden h-10 items-center gap-2 rounded-full bg-white px-4 text-ink-950 transition hover:-translate-y-0.5 hover:bg-afghan-gold md:flex",
+              "hidden h-10 items-center gap-2 rounded-md bg-[var(--text)] px-4 text-[var(--page-bg)] transition hover:-translate-y-0.5 hover:bg-afghan-gold md:flex",
               controlTextClass
             )}
           >
@@ -111,7 +111,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setIsOpen((current) => !current)}
-            className="grid size-10 place-items-center rounded-full border border-white/15 bg-white/10 light-text lg:hidden"
+            className="grid size-10 place-items-center rounded-md border border-[var(--line)] bg-[var(--surface)] light-text lg:hidden"
             aria-label={isOpen ? ui("closeMenu") : ui("openMenu")}
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -121,19 +121,21 @@ export function SiteHeader() {
 
       <div
         className={cn(
-          "mx-auto w-[min(1180px,calc(100%-32px))] overflow-hidden transition-all duration-300 lg:hidden",
-          isOpen ? "max-h-[520px] pb-5" : "max-h-0"
+          "page-shell overflow-hidden transition-all duration-300 lg:hidden",
+          isOpen ? "max-h-[520px] pt-2" : "max-h-0"
         )}
       >
-        <div className="glass-panel grid gap-2 rounded-2xl p-3">
+        <div className="nav-surface grid gap-2 rounded-lg p-3">
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "rounded-xl px-4 py-3 text-start transition",
+                "rounded-md px-4 py-3 text-start transition",
                 navTextClass,
-                pathname === item.href ? "bg-white text-ink-950" : "muted-text hover:bg-white/10"
+                pathname === item.href
+                  ? "bg-[var(--text)] text-[var(--page-bg)]"
+                  : "muted-text hover:bg-[var(--surface-strong)]"
               )}
             >
               {item.label[locale]}
@@ -143,7 +145,7 @@ export function SiteHeader() {
             type="button"
             onClick={toggleLocale}
             className={cn(
-              "flex items-center gap-2 rounded-xl px-4 py-3 muted-text hover:bg-white/10",
+              "flex items-center gap-2 rounded-md px-4 py-3 muted-text hover:bg-[var(--surface-strong)]",
               controlTextClass
             )}
           >

@@ -1,0 +1,7 @@
+[mcp_servers.project_code_workflow]
+command = "node"
+args = ["mcp/code-workflow-server.mjs"]
+cwd = "."
+startup_timeout_sec = 10
+tool_timeout_sec = 120
+default_tools_approval_mode = "prompt"

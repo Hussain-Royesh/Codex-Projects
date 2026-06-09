@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy } from "lucide-react";
+import { CalendarDays, Clock, MapPin, Trophy } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { MatchCard, PlayerCard } from "@/components/Cards";
 import { LocalizedText } from "@/components/LocalizedText";
@@ -12,6 +12,8 @@ import {
   type ContentPlayer
 } from "@/lib/api";
 import type { LocalizedString, Match, Player } from "@/types/site";
+
+type ContentLoader<T> = () => Promise<T[]>;
 
 function localized(value: string): LocalizedString {
   return {
@@ -47,6 +49,49 @@ function toSiteMatch(match: ContentMatch): Match {
   };
 }
 
+async function loadSitePlayers() {
+  const result = await fetchPlayers();
+  return result.players.map(toSitePlayer);
+}
+
+async function loadSiteMatches() {
+  const result = await fetchMatches();
+  return result.matches.map(toSiteMatch);
+}
+
+function useDynamicContent<T>(initialItems: T[], loadItems: ContentLoader<T>) {
+  const [items, setItems] = useState(initialItems);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    loadItems()
+      .then((loadedItems) => {
+        if (isMounted) {
+          setItems(loadedItems);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setItems(initialItems);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [initialItems, loadItems]);
+
+  return items;
+}
+
+function useVisibleItems<T>(items: T[], limit?: number) {
+  return useMemo(
+    () => (typeof limit === "number" ? items.slice(0, limit) : items),
+    [items, limit]
+  );
+}
+
 export function DynamicPlayersGrid({
   initialPlayers,
   limit
@@ -54,18 +99,11 @@ export function DynamicPlayersGrid({
   initialPlayers: Player[];
   limit?: number;
 }) {
-  const [players, setPlayers] = useState(initialPlayers);
-
-  useEffect(() => {
-    fetchPlayers()
-      .then((result) => setPlayers(result.players.map(toSitePlayer)))
-      .catch(() => setPlayers(initialPlayers));
-  }, [initialPlayers]);
-
-  const visiblePlayers = typeof limit === "number" ? players.slice(0, limit) : players;
+  const players = useDynamicContent(initialPlayers, loadSitePlayers);
+  const visiblePlayers = useVisibleItems(players, limit);
 
   return (
-    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {visiblePlayers.map((player) => (
         <PlayerCard key={player.id} player={player} />
       ))}
@@ -82,15 +120,8 @@ export function DynamicMatchCards({
   limit?: number;
   compact?: boolean;
 }) {
-  const [matches, setMatches] = useState(initialMatches);
-
-  useEffect(() => {
-    fetchMatches()
-      .then((result) => setMatches(result.matches.map(toSiteMatch)))
-      .catch(() => setMatches(initialMatches));
-  }, [initialMatches]);
-
-  const visibleMatches = typeof limit === "number" ? matches.slice(0, limit) : matches;
+  const matches = useDynamicContent(initialMatches, loadSiteMatches);
+  const visibleMatches = useVisibleItems(matches, limit);
 
   return (
     <div className="grid gap-4">
@@ -106,22 +137,32 @@ export function DynamicHeroNextMatch({ initialMatch }: { initialMatch: Match }) 
   const [match, setMatch] = useState(initialMatch);
 
   useEffect(() => {
-    fetchMatches()
-      .then((result) => {
-        const nextMatch = result.matches[0];
+    let isMounted = true;
 
-        if (nextMatch) {
-          setMatch(toSiteMatch(nextMatch));
+    loadSiteMatches()
+      .then((matches) => {
+        const nextMatch = matches[0];
+
+        if (isMounted && nextMatch) {
+          setMatch(nextMatch);
         }
       })
-      .catch(() => setMatch(initialMatch));
+      .catch(() => {
+        if (isMounted) {
+          setMatch(initialMatch);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [initialMatch]);
 
   return (
-    <div className="glass-panel mb-4 min-w-0 overflow-hidden rounded-3xl p-5 light-text">
+    <div className="glass-panel mb-4 min-w-0 overflow-hidden rounded-lg p-5 text-white">
       <div className="mb-5 flex items-center justify-between gap-3">
         <p className="font-mono text-sm font-black text-afghan-gold">
-          <LocalizedText value={{ en: "Next match", fa: "بازی بعدی" }} />
+          <LocalizedText value={{ en: "Next match", fa: "Next match" }} />
         </p>
         <Trophy size={20} />
       </div>
@@ -136,11 +177,19 @@ export function DynamicHeroNextMatch({ initialMatch }: { initialMatch: Match }) 
           {match.awayTeam[locale]}
         </p>
       </div>
-      <div className="mt-5 rounded-2xl border border-white/10 bg-white/10 p-4 text-sm muted-text">
-        <p>
-          {match.date} · {match.time}
-        </p>
-        <p className="mt-1">{match.venue[locale]}</p>
+      <div className="mt-5 grid gap-2 text-sm text-white/85">
+        <span className="flex min-w-0 items-center gap-2 rounded-md border border-white/15 bg-white/10 p-3">
+          <CalendarDays size={16} />
+          {match.date}
+        </span>
+        <span className="flex min-w-0 items-center gap-2 rounded-md border border-white/15 bg-white/10 p-3">
+          <Clock size={16} />
+          {match.time}
+        </span>
+        <span className="flex min-w-0 items-center gap-2 rounded-md border border-white/15 bg-white/10 p-3">
+          <MapPin size={16} />
+          {match.venue[locale]}
+        </span>
       </div>
     </div>
   );
@@ -148,27 +197,21 @@ export function DynamicHeroNextMatch({ initialMatch }: { initialMatch: Match }) 
 
 export function DynamicFixtureTable({ initialMatches }: { initialMatches: Match[] }) {
   const { locale } = usePreferences();
-  const [matches, setMatches] = useState(initialMatches);
-
-  useEffect(() => {
-    fetchMatches()
-      .then((result) => setMatches(result.matches.map(toSiteMatch)))
-      .catch(() => setMatches(initialMatches));
-  }, [initialMatches]);
+  const matches = useDynamicContent(initialMatches, loadSiteMatches);
 
   const tableCopy = useMemo(
     () => ({
-      date: locale === "fa" ? "تاریخ" : "Date",
-      fixture: locale === "fa" ? "مسابقه" : "Fixture",
-      competition: locale === "fa" ? "رقابت" : "Competition",
-      status: locale === "fa" ? "وضعیت" : "Status"
+      date: locale === "fa" ? "Date" : "Date",
+      fixture: locale === "fa" ? "Fixture" : "Fixture",
+      competition: locale === "fa" ? "Competition" : "Competition",
+      status: locale === "fa" ? "Status" : "Status"
     }),
     [locale]
   );
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10">
-      <div className="grid grid-cols-4 bg-white/10 px-4 py-3 font-mono text-xs font-black uppercase muted-text">
+    <div className="overflow-hidden rounded-lg border border-[var(--line)] bg-[var(--surface)]">
+      <div className="hidden grid-cols-4 bg-[var(--surface-strong)] px-4 py-3 text-xs font-black uppercase muted-text md:grid">
         <span>{tableCopy.date}</span>
         <span>{tableCopy.fixture}</span>
         <span>{tableCopy.competition}</span>
@@ -177,16 +220,32 @@ export function DynamicFixtureTable({ initialMatches }: { initialMatches: Match[
       {matches.map((match) => (
         <div
           key={match.id}
-          className="grid grid-cols-1 gap-2 border-t border-white/10 px-4 py-5 text-sm md:grid-cols-4"
+          className="grid grid-cols-1 gap-3 border-t border-[var(--line)] px-4 py-5 text-sm first:border-t-0 md:grid-cols-4"
         >
-          <span className="font-mono font-black text-afghan-gold">
-            {match.date} · {match.time}
+          <span className="grid gap-1 font-black text-afghan-green">
+            <span className="text-[0.68rem] uppercase tracking-normal muted-text md:hidden">
+              {tableCopy.date}
+            </span>
+            {match.date} / {match.time}
           </span>
-          <span className="font-bold light-text">
+          <span className="grid gap-1 font-bold light-text">
+            <span className="text-[0.68rem] uppercase tracking-normal muted-text md:hidden">
+              {tableCopy.fixture}
+            </span>
             {match.homeTeam[locale]} vs {match.awayTeam[locale]}
           </span>
-          <span className="muted-text">{match.competition[locale]}</span>
-          <span className="muted-text">{match.status[locale]}</span>
+          <span className="grid gap-1 muted-text">
+            <span className="text-[0.68rem] uppercase tracking-normal muted-text md:hidden">
+              {tableCopy.competition}
+            </span>
+            {match.competition[locale]}
+          </span>
+          <span className="grid gap-1">
+            <span className="text-[0.68rem] uppercase tracking-normal muted-text md:hidden">
+              {tableCopy.status}
+            </span>
+            <span className="badge status-badge w-fit">{match.status[locale]}</span>
+          </span>
         </div>
       ))}
     </div>

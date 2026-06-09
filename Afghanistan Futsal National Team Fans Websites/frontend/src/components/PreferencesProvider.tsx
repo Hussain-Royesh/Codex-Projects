@@ -58,7 +58,7 @@ const PreferencesContext = createContext<PreferencesContextValue | null>(null);
 
 export function PreferencesProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<Locale>("en");
-  const [theme, setTheme] = useState<Theme>("dark");
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
     const savedLocale = window.localStorage.getItem("aft_locale") as Locale | null;

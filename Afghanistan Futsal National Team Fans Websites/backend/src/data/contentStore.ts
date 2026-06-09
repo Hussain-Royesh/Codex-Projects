@@ -1,20 +1,18 @@
 import { randomUUID } from "crypto";
-import fs from "fs/promises";
 import path from "path";
+import { JsonRepository } from "./jsonRepository";
 import type { Match, Player } from "../types/content";
 
 const dataDir = path.resolve(process.cwd(), "src", "data");
 const playersFilePath = path.join(dataDir, "players.json");
 const matchesFilePath = path.join(dataDir, "matches.json");
 
-async function readJsonFile<T>(filePath: string): Promise<T[]> {
-  const fileContents = await fs.readFile(filePath, "utf8");
-  return JSON.parse(fileContents) as T[];
-}
-
-async function writeJsonFile<T>(filePath: string, records: T[]): Promise<void> {
-  await fs.writeFile(filePath, `${JSON.stringify(records, null, 2)}\n`);
-}
+const playerRepository = new JsonRepository<Player>(playersFilePath, (players) =>
+  players.sort((a, b) => a.jerseyNumber - b.jerseyNumber)
+);
+const matchRepository = new JsonRepository<Match>(matchesFilePath, (matches) =>
+  matches.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`))
+);
 
 function toNumber(value: unknown, fallback: number): number {
   const parsed = Number(value);
@@ -26,17 +24,14 @@ function toString(value: unknown, fallback = ""): string {
 }
 
 export async function getPlayers(): Promise<Player[]> {
-  const players = await readJsonFile<Player>(playersFilePath);
-  return players.sort((a, b) => a.jerseyNumber - b.jerseyNumber);
+  return playerRepository.list();
 }
 
 export async function getPlayerById(id: string): Promise<Player | undefined> {
-  const players = await getPlayers();
-  return players.find((player) => player.id === id);
+  return playerRepository.findById(id);
 }
 
 export async function createPlayer(input: Partial<Player>): Promise<Player> {
-  const players = await readJsonFile<Player>(playersFilePath);
   const player: Player = {
     id: `p-${randomUUID()}`,
     name: toString(input.name),
@@ -48,24 +43,14 @@ export async function createPlayer(input: Partial<Player>): Promise<Player> {
     profile: toString(input.profile, "Player profile will be updated soon.")
   };
 
-  players.push(player);
-  await writeJsonFile(playersFilePath, players);
-  return player;
+  return playerRepository.create(player);
 }
 
 export async function updatePlayer(
   id: string,
   input: Partial<Player>
 ): Promise<Player | undefined> {
-  const players = await readJsonFile<Player>(playersFilePath);
-  const index = players.findIndex((player) => player.id === id);
-
-  if (index === -1) {
-    return undefined;
-  }
-
-  const current = players[index];
-  const updated: Player = {
+  return playerRepository.update(id, (current) => ({
     ...current,
     name: toString(input.name, current.name),
     position: toString(input.position, current.position),
@@ -74,37 +59,22 @@ export async function updatePlayer(
     height: toString(input.height, current.height),
     photo: toString(input.photo, current.photo),
     profile: toString(input.profile, current.profile)
-  };
-
-  players[index] = updated;
-  await writeJsonFile(playersFilePath, players);
-  return updated;
+  }));
 }
 
 export async function deletePlayer(id: string): Promise<boolean> {
-  const players = await readJsonFile<Player>(playersFilePath);
-  const nextPlayers = players.filter((player) => player.id !== id);
-
-  if (nextPlayers.length === players.length) {
-    return false;
-  }
-
-  await writeJsonFile(playersFilePath, nextPlayers);
-  return true;
+  return playerRepository.delete(id);
 }
 
 export async function getMatches(): Promise<Match[]> {
-  const matches = await readJsonFile<Match>(matchesFilePath);
-  return matches.sort((a, b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`));
+  return matchRepository.list();
 }
 
 export async function getMatchById(id: string): Promise<Match | undefined> {
-  const matches = await getMatches();
-  return matches.find((match) => match.id === id);
+  return matchRepository.findById(id);
 }
 
 export async function createMatch(input: Partial<Match>): Promise<Match> {
-  const matches = await readJsonFile<Match>(matchesFilePath);
   const match: Match = {
     id: `m-${randomUUID()}`,
     date: toString(input.date),
@@ -117,24 +87,14 @@ export async function createMatch(input: Partial<Match>): Promise<Match> {
     note: toString(input.note, "Match details will be updated soon.")
   };
 
-  matches.push(match);
-  await writeJsonFile(matchesFilePath, matches);
-  return match;
+  return matchRepository.create(match);
 }
 
 export async function updateMatch(
   id: string,
   input: Partial<Match>
 ): Promise<Match | undefined> {
-  const matches = await readJsonFile<Match>(matchesFilePath);
-  const index = matches.findIndex((match) => match.id === id);
-
-  if (index === -1) {
-    return undefined;
-  }
-
-  const current = matches[index];
-  const updated: Match = {
+  return matchRepository.update(id, (current) => ({
     ...current,
     date: toString(input.date, current.date),
     time: toString(input.time, current.time),
@@ -144,21 +104,9 @@ export async function updateMatch(
     venue: toString(input.venue, current.venue),
     status: toString(input.status, current.status),
     note: toString(input.note, current.note)
-  };
-
-  matches[index] = updated;
-  await writeJsonFile(matchesFilePath, matches);
-  return updated;
+  }));
 }
 
 export async function deleteMatch(id: string): Promise<boolean> {
-  const matches = await readJsonFile<Match>(matchesFilePath);
-  const nextMatches = matches.filter((match) => match.id !== id);
-
-  if (nextMatches.length === matches.length) {
-    return false;
-  }
-
-  await writeJsonFile(matchesFilePath, nextMatches);
-  return true;
+  return matchRepository.delete(id);
 }

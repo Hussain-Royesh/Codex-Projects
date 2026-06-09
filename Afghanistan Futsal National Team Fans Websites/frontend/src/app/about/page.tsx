@@ -55,7 +55,7 @@ export default function AboutPage() {
         }}
       />
 
-      <section className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-10 pb-20 lg:grid-cols-[1fr_0.85fr]">
+      <section className="page-shell grid gap-10 pb-20 pt-12 lg:grid-cols-[1fr_0.85fr]">
         <div className="space-y-6">
           <SectionHeader
             eyebrow={{ en: "Identity", fa: "هویت" }}
@@ -69,7 +69,7 @@ export default function AboutPage() {
         </div>
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
           {siteStats.map((stat) => (
-            <div key={stat.label.en} className="sport-card rounded-3xl p-6">
+            <div key={stat.label.en} className="sport-card p-5">
               <p className="font-display text-4xl font-black light-text">{stat.value}</p>
               <p className="mt-1 text-sm muted-text">
                 <LocalizedText value={stat.label} />
@@ -79,8 +79,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--page-soft)] py-20">
-        <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+      <section className="section-band section-pad">
+        <div className="page-shell">
           <SectionHeader
             eyebrow={{ en: "Principles", fa: "اصول" }}
             title={{ en: "Designed for the national game", fa: "طراحی شده برای بازی ملی" }}
@@ -89,8 +89,8 @@ export default function AboutPage() {
             {values.map((value) => {
               const Icon = value.icon;
               return (
-                <article key={value.title.en} className="sport-card rounded-3xl p-6">
-                  <div className="grid size-12 place-items-center rounded-2xl bg-white text-ink-950">
+                <article key={value.title.en} className="sport-card p-5">
+                  <div className="icon-tile">
                     <Icon size={22} />
                   </div>
                   <h2 className="mt-6 font-display text-2xl font-black light-text">

@@ -3,11 +3,12 @@ import express from "express";
 import jwt, { type SignOptions } from "jsonwebtoken";
 import env from "../config/env";
 import { findUserByEmail, findUserById, toPublicUser } from "../data/users";
+import { asyncHandler } from "../middleware/asyncHandler";
 import { authenticate } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
-router.post("/login", async (request, response) => {
+router.post("/login", asyncHandler(async (request, response) => {
   const { email, password } = request.body as {
     email?: string;
     password?: string;
@@ -59,7 +60,7 @@ router.post("/login", async (request, response) => {
     token,
     user: toPublicUser(user)
   });
-});
+}));
 
 router.get("/me", authenticate, (request, response) => {
   const userId = request.user?.id;

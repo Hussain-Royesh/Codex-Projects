@@ -37,7 +37,7 @@ export default function ContactPage() {
         }}
       />
 
-      <section className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-8 pb-24 lg:grid-cols-[0.8fr_1.2fr]">
+      <section className="page-shell grid gap-8 pb-24 pt-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div className="space-y-5">
           <SectionHeader
             eyebrow={{ en: "Channels", fa: "کانال‌ها" }}
@@ -47,8 +47,8 @@ export default function ContactPage() {
             {channels.map((channel) => {
               const Icon = channel.icon;
               return (
-                <article key={channel.value} className="sport-card rounded-3xl p-5">
-                  <div className="mb-4 grid size-11 place-items-center rounded-2xl bg-white text-ink-950">
+                <article key={channel.value} className="sport-card p-5">
+                  <div className="icon-tile mb-4">
                     <Icon size={20} />
                   </div>
                   <p className="font-display text-xl font-black light-text">
@@ -61,13 +61,14 @@ export default function ContactPage() {
           </div>
         </div>
 
-        <form className="glass-panel rounded-3xl p-5 md:p-8">
+        <form className="glass-panel rounded-lg p-5 md:p-8">
           <div className="grid gap-5 md:grid-cols-2">
             <label className="field-label">
               <LocalizedText value={{ en: "Name", fa: "نام" }} />
               <input
                 className="field-control"
                 placeholder="Ahmad"
+                required
               />
             </label>
             <label className="field-label">
@@ -76,6 +77,7 @@ export default function ContactPage() {
                 type="email"
                 className="field-control"
                 placeholder="you@example.com"
+                required
               />
             </label>
           </div>
@@ -85,6 +87,7 @@ export default function ContactPage() {
               rows={7}
               className="field-control"
               placeholder="Share your message"
+              required
             />
           </label>
           <button

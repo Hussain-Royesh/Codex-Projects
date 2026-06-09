@@ -26,11 +26,11 @@ export function SiteFooter() {
     : "text-sm";
 
   return (
-    <footer className="border-t border-white/10 bg-ink-950/70">
-      <div className="mx-auto grid w-[min(1180px,calc(100%-32px))] gap-10 py-12 md:grid-cols-[1.2fr_0.8fr_1fr]">
+    <footer className="border-t border-[var(--line)] bg-[var(--page-soft)]">
+      <div className="page-shell grid gap-10 py-12 md:grid-cols-[1.2fr_0.8fr_1fr]">
         <div className="space-y-5">
           <div className="flex items-center gap-3">
-            <span className="relative grid size-12 place-items-center overflow-hidden rounded-full border border-white/15 bg-ink-950 font-mono text-sm font-black text-white">
+            <span className="relative grid size-12 place-items-center overflow-hidden rounded-md border border-[var(--line)] bg-ink-950 font-mono text-sm font-black text-white">
               <span className="absolute inset-x-0 top-0 h-1.5 bg-afghan-red" />
               <span className="absolute inset-x-0 bottom-0 h-1.5 bg-afghan-green" />
               AF
@@ -52,7 +52,7 @@ export function SiteFooter() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "group flex items-center justify-between rounded-xl border border-transparent py-1.5 muted-text transition hover:text-[var(--text)]",
+              "group flex items-center justify-between rounded-md border border-transparent py-1.5 muted-text transition hover:text-[var(--text)]",
                   navLinkClass
                 )}
               >
@@ -67,7 +67,7 @@ export function SiteFooter() {
           <p className={labelClass}>{ui("partners")}</p>
           <div className="grid grid-cols-2 gap-3">
             {sponsors.map((sponsor) => (
-              <div key={sponsor.id} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+              <div key={sponsor.id} className="rounded-md border border-[var(--line)] bg-[var(--surface)] p-4">
                 <p className="font-display text-sm font-black light-text">{sponsor.name}</p>
                 <p className="text-xs muted-text">{sponsor.tier[locale]}</p>
               </div>
@@ -75,7 +75,7 @@ export function SiteFooter() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-5 text-center text-xs muted-text">
+      <div className="border-t border-[var(--line)] py-5 text-center text-xs muted-text">
         © 2026 Afghanistan Futsal National Team
       </div>
     </footer>

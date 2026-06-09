@@ -20,7 +20,7 @@ export default function TeamPage() {
         }}
       />
 
-      <section className="mx-auto w-[min(1180px,calc(100%-32px))] pb-20">
+      <section className="page-shell pb-20 pt-12">
         <SectionHeader
           eyebrow={{ en: "Technical staff", fa: "کادر فنی" }}
           title={{ en: "Built around clarity", fa: "ساخته شده بر پایه وضاحت" }}
@@ -29,7 +29,7 @@ export default function TeamPage() {
           {coaches.map((coach) => (
             <article
               key={coach.id}
-              className="sport-card grid overflow-hidden rounded-3xl md:grid-cols-[0.8fr_1fr]"
+              className="sport-card grid overflow-hidden md:grid-cols-[0.8fr_1fr]"
             >
               <img src={coach.photo} alt={coach.name} className="h-full min-h-64 w-full object-cover" />
               <div className="flex flex-col justify-end p-6">
@@ -43,8 +43,8 @@ export default function TeamPage() {
         </div>
       </section>
 
-      <section className="bg-[var(--page-soft)] py-20">
-        <div className="mx-auto w-[min(1180px,calc(100%-32px))]">
+      <section className="section-band section-pad">
+        <div className="page-shell">
           <SectionHeader
             eyebrow={{ en: "Players", fa: "بازیکنان" }}
             title={{ en: "Roster profiles", fa: "پروفایل‌های تیم" }}

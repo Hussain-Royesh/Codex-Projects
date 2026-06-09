@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import type { ErrorRequestHandler } from "express";
 import env from "./config/env";
 import adminRoutes from "./routes/adminRoutes";
 import authRoutes from "./routes/authRoutes";
@@ -26,6 +27,20 @@ app.get("/api/health", (request, response) => {
     service: "Afghanistan Futsal API"
   });
 });
+
+const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
+  console.error(error);
+
+  if (response.headersSent) {
+    return next(error);
+  }
+
+  return response.status(500).json({
+    message: "Internal server error"
+  });
+};
+
+app.use(errorHandler);
 
 app.listen(env.port, () => {
   console.log(`Backend API running on http://localhost:${env.port}`);

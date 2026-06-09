@@ -2,48 +2,57 @@
 
 import Link from "next/link";
 import { ArrowUpRight, CalendarDays, Clock, MapPin, Ruler, Shirt } from "lucide-react";
-import type { GalleryItem, Match, NewsItem, Player, Sponsor } from "@/types/site";
+import type { GalleryItem, Locale, Match, NewsItem, Player, Sponsor } from "@/types/site";
 import { usePreferences } from "@/components/PreferencesProvider";
 
-function formatDate(date: string, locale: "en" | "fa") {
-  return new Intl.DateTimeFormat(locale === "fa" ? "fa-AF" : "en", {
+const dateFormatters: Record<Locale, Intl.DateTimeFormat> = {
+  en: new Intl.DateTimeFormat("en", {
     month: "short",
     day: "numeric",
     year: "numeric"
-  }).format(new Date(`${date}T00:00:00`));
+  }),
+  fa: new Intl.DateTimeFormat("fa-AF", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  })
+};
+
+function formatDate(date: string, locale: Locale) {
+  return dateFormatters[locale].format(new Date(`${date}T00:00:00`));
 }
 
 export function PlayerCard({ player }: { player: Player }) {
   const { locale } = usePreferences();
 
   return (
-    <article className="sport-card group overflow-hidden rounded-3xl">
+    <article className="sport-card group overflow-hidden">
       <div className="relative aspect-[4/3] overflow-hidden bg-ink-900">
         <img
           src={player.photo}
           alt={player.name}
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
-        <div className="absolute left-4 top-4 grid size-14 place-items-center rounded-2xl bg-white text-xl font-black text-ink-950">
+        <div className="absolute left-4 top-4 grid size-12 place-items-center rounded-md bg-white text-lg font-black text-ink-950">
           {player.jerseyNumber}
         </div>
       </div>
-      <div className="space-y-4 p-5">
+      <div className="space-y-4 p-4">
         <div>
-          <p className="font-display text-xl font-black light-text">{player.name}</p>
-          <p className="font-mono text-sm font-extrabold text-afghan-gold">{player.position[locale]}</p>
+          <p className="font-display text-xl font-black leading-tight light-text">{player.name}</p>
+          <p className="mt-1 text-sm font-extrabold text-afghan-green">{player.position[locale]}</p>
         </div>
         <p className="text-sm muted-text">{player.profile[locale]}</p>
         <div className="grid grid-cols-3 gap-2 text-xs muted-text">
-          <span className="rounded-2xl border border-white/10 bg-white/5 p-3">
+          <span className="info-chip grid gap-1 p-2">
             <Shirt className="mb-1" size={15} />
             {player.jerseyNumber}
           </span>
-          <span className="rounded-2xl border border-white/10 bg-white/5 p-3">
+          <span className="info-chip grid gap-1 p-2">
             <CalendarDays className="mb-1" size={15} />
             {player.age}
           </span>
-          <span className="rounded-2xl border border-white/10 bg-white/5 p-3">
+          <span className="info-chip grid gap-1 p-2">
             <Ruler className="mb-1" size={15} />
             {player.height}
           </span>
@@ -57,12 +66,12 @@ export function MatchCard({ match, compact = false }: { match: Match; compact?: 
   const { locale } = usePreferences();
 
   return (
-    <article className="sport-card rounded-3xl p-5 md:p-6">
+    <article className="sport-card p-4 md:p-5">
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <span className="rounded-full bg-afghan-red px-3 py-1 text-xs font-black text-white">
+        <span className="badge status-badge">
           {match.status[locale]}
         </span>
-        <span className="font-mono text-sm font-extrabold text-afghan-gold">
+        <span className="text-sm font-extrabold text-afghan-green">
           {match.competition[locale]}
         </span>
       </div>
@@ -70,23 +79,23 @@ export function MatchCard({ match, compact = false }: { match: Match; compact?: 
         <p className="min-w-0 font-display text-lg font-black light-text md:text-2xl">
           {match.homeTeam[locale]}
         </p>
-        <span className="w-fit justify-self-start rounded-full border border-white/15 px-3 py-1 font-mono text-sm font-black muted-text sm:justify-self-center">
+        <span className="badge w-fit justify-self-start sm:justify-self-center">
           VS
         </span>
         <p className="min-w-0 font-display text-lg font-black light-text sm:text-right md:text-2xl">
           {match.awayTeam[locale]}
         </p>
       </div>
-      <div className="mt-5 grid gap-3 text-sm muted-text md:grid-cols-3">
-        <span className="flex items-center gap-2">
+      <div className="mt-5 grid gap-2 text-sm muted-text md:grid-cols-3">
+        <span className="info-chip">
           <CalendarDays size={16} />
           {formatDate(match.date, locale)}
         </span>
-        <span className="flex items-center gap-2">
+        <span className="info-chip">
           <Clock size={16} />
           {match.time}
         </span>
-        <span className="flex items-center gap-2">
+        <span className="info-chip">
           <MapPin size={16} />
           {match.venue[locale]}
         </span>
@@ -100,7 +109,7 @@ export function NewsCard({ item }: { item: NewsItem }) {
   const { locale, ui } = usePreferences();
 
   return (
-    <article className="sport-card group overflow-hidden rounded-3xl">
+    <article className="sport-card group overflow-hidden">
       <div className="relative aspect-[16/10] overflow-hidden bg-ink-900">
         <img
           src={item.image}
@@ -108,9 +117,9 @@ export function NewsCard({ item }: { item: NewsItem }) {
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
       </div>
-      <div className="space-y-4 p-5">
+      <div className="space-y-4 p-4">
         <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-extrabold">
-          <span className="text-afghan-gold">{item.category[locale]}</span>
+          <span className="text-afghan-green">{item.category[locale]}</span>
           <span className="muted-text">{formatDate(item.date, locale)}</span>
         </div>
         <h3 className="font-display text-xl font-black leading-tight light-text">
@@ -119,7 +128,7 @@ export function NewsCard({ item }: { item: NewsItem }) {
         <p className="text-sm muted-text">{item.summary[locale]}</p>
         <Link
           href={item.href}
-          className="inline-flex items-center gap-2 text-sm font-black text-afghan-gold"
+          className="inline-flex items-center gap-2 text-sm font-black text-afghan-red"
         >
           {ui("readMore")}
           <ArrowUpRight size={16} />
@@ -133,7 +142,7 @@ export function GalleryCard({ item }: { item: GalleryItem }) {
   const { locale } = usePreferences();
 
   return (
-    <article className="sport-card group overflow-hidden rounded-3xl">
+    <article className="sport-card group overflow-hidden">
       <div className="relative aspect-[4/3] overflow-hidden bg-ink-900">
         <img
           src={item.image}
@@ -141,7 +150,7 @@ export function GalleryCard({ item }: { item: GalleryItem }) {
           className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
         />
         <div className="absolute inset-x-0 bottom-0 p-4">
-          <div className="glass-panel rounded-2xl p-4">
+          <div className="glass-panel rounded-lg p-4">
             <p className="font-mono text-xs font-black text-afghan-gold">{item.category[locale]}</p>
             <h3 className="font-display text-xl font-black text-white">{item.title[locale]}</h3>
           </div>
@@ -157,7 +166,7 @@ export function SponsorStrip({ sponsors }: { sponsors: Sponsor[] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
       {sponsors.map((sponsor) => (
-        <div key={sponsor.id} className="sport-card rounded-3xl p-6">
+        <div key={sponsor.id} className="sport-card p-5">
           <p className="font-display text-xl font-black light-text">{sponsor.name}</p>
           <p className="mt-1 text-sm muted-text">{sponsor.tier[locale]}</p>
         </div>

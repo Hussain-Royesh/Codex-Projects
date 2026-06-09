@@ -125,7 +125,7 @@ export default function AdminPage() {
 
   if (!token || !user) {
     return (
-      <section className="mx-auto min-h-screen w-[min(1180px,calc(100%-32px))] pb-24 pt-32">
+      <section className="page-shell min-h-screen pb-24 pt-32">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div className="lg:sticky lg:top-28">
             <p className="eyebrow mb-4">{text.eyebrow}</p>
@@ -136,8 +136,8 @@ export default function AdminPage() {
             <div className="mt-8 h-1.5 w-44 rounded-full afghan-rail" />
           </div>
 
-          <form onSubmit={handleSubmit} className="admin-panel rounded-3xl p-5 md:p-8">
-            <div className="mb-8 grid size-14 place-items-center rounded-2xl bg-[var(--text)] text-[var(--page-bg)]">
+          <form onSubmit={handleSubmit} className="admin-panel rounded-lg p-5 md:p-8">
+            <div className="icon-tile mb-8 size-14">
               <LockKeyhole size={25} />
             </div>
             <label className="field-label">
@@ -163,7 +163,7 @@ export default function AdminPage() {
               {isLoading ? text.loading : text.signIn}
             </button>
             {message ? (
-              <p className="mt-5 rounded-2xl border border-afghan-red/40 bg-afghan-red/10 p-4 text-sm font-semibold text-afghan-red">
+              <p className="mt-5 rounded-md border border-afghan-red/40 bg-afghan-red/10 p-4 text-sm font-semibold text-afghan-red">
                 {text.error}: {message}
               </p>
             ) : null}
@@ -174,8 +174,8 @@ export default function AdminPage() {
   }
 
   return (
-    <section className="mx-auto min-h-screen w-[min(1180px,calc(100%-32px))] space-y-6 pb-24 pt-32">
-      <div className="admin-panel rounded-3xl p-5 md:p-7">
+    <section className="page-shell min-h-screen space-y-6 pb-24 pt-32">
+      <div className="admin-panel rounded-lg p-5 md:p-7">
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
           <div>
             <p className="eyebrow mb-3">{text.eyebrow}</p>
@@ -221,7 +221,7 @@ export default function AdminPage() {
 
 function SummaryTile({ icon, label, value }: { icon?: ReactNode; label: string; value: string }) {
   return (
-    <div className="admin-row rounded-2xl p-4">
+    <div className="admin-row rounded-md p-4">
       <p className="flex items-center gap-2 text-xs font-black uppercase muted-text">
         {icon}
         {label}
@@ -245,9 +245,9 @@ function DashboardPanel({
   permissionsLabel: string;
 }) {
   return (
-    <article className="admin-panel rounded-3xl p-5 md:p-6">
+    <article className="admin-panel rounded-lg p-5 md:p-6">
       <div className="mb-5 flex items-center gap-3">
-        <div className="grid size-11 place-items-center rounded-2xl bg-[var(--text)] text-[var(--page-bg)]">
+        <div className="icon-tile">
           {icon}
         </div>
         <div>
