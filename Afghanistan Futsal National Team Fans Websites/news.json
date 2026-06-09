@@ -1,0 +1,34 @@
+[
+  {
+    "title": "Afghanistan Futsal National Team Website Launches Matchday Hub",
+    "date": "2026-06-05",
+    "category": "Club News",
+    "summary": "The website now brings squad profiles, upcoming fixtures, gallery moments, and supporter updates into one modern matchday experience.",
+    "image": "images/match-placeholder.svg",
+    "url": "fixtures.html"
+  },
+  {
+    "title": "Supporters Prepare For Summer Fixture Run",
+    "date": "2026-06-03",
+    "category": "Supporters",
+    "summary": "Fan groups are preparing watch-party plans and community coverage as the upcoming match schedule begins to take shape.",
+    "image": "images/fans-placeholder.svg",
+    "url": "contact.html"
+  },
+  {
+    "title": "Core Squad Profiles Added To Team Page",
+    "date": "2026-06-01",
+    "category": "Team",
+    "summary": "The team page now loads player profiles dynamically, making roster updates easier as confirmed information becomes available.",
+    "image": "images/player-placeholder.svg",
+    "url": "team.html"
+  },
+  {
+    "title": "Gallery Slots Ready For Fan Submissions",
+    "date": "2026-05-28",
+    "category": "Gallery",
+    "summary": "The visual archive is ready for match photos, training scenes, supporter images, and milestone moments from the futsal community.",
+    "image": "images/training-placeholder.svg",
+    "url": "gallery.html"
+  }
+]

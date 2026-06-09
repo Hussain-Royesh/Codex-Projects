@@ -1,0 +1,42 @@
+[
+  {
+    "id": "p-1",
+    "name": "Jawad Safari",
+    "position": "Goalkeeper",
+    "jerseyNumber": 1,
+    "age": 25,
+    "height": "180 cm",
+    "photo": "/images/mohammad-jawad-safari.webp",
+    "profile": "Commanding presence built for fast resets and confident distribution."
+  },
+  {
+    "id": "p-2",
+    "name": "Mehran Ghulami",
+    "position": "Pivot",
+    "jerseyNumber": 6,
+    "age": 23,
+    "height": "176 cm",
+    "photo": "/images/mehran-ghulami.webp",
+    "profile": "Organizes the press and protects the central lane under pressure."
+  },
+  {
+    "id": "p-3",
+    "name": "Player Three",
+    "position": "Wing",
+    "jerseyNumber": 7,
+    "age": 23,
+    "height": "172 cm",
+    "photo": "/images/player-placeholder.svg",
+    "profile": "Direct runner with a sharp first touch and quick finishing instinct."
+  },
+  {
+    "id": "p-4",
+    "name": "Player Four",
+    "position": "Pivot",
+    "jerseyNumber": 9,
+    "age": 26,
+    "height": "178 cm",
+    "photo": "/images/player-placeholder.svg",
+    "profile": "Holds the ball in tight spaces and brings runners into play."
+  }
+]

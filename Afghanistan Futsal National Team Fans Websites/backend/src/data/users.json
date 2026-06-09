@@ -1,0 +1,22 @@
+[
+  {
+    "id": "admin-user-1",
+    "fullName": "Site Administrator",
+    "email": "admin@afghanistanfutsal.test",
+    "passwordHash": "$2b$12$Fl1LZaPbVubXAcwRRq0MU.PbwOsJLEnm7uwMJtHXuqkWEN8yUtVWu",
+    "role": "admin",
+    "status": "active",
+    "createdAt": "2026-06-05T00:00:00.000Z",
+    "updatedAt": "2026-06-05T10:17:13.287Z"
+  },
+  {
+    "id": "editor-user-1",
+    "fullName": "Content Editor",
+    "email": "editor@afghanistanfutsal.test",
+    "passwordHash": "$2b$12$8cZbzaS8jzIVE5ecDdGOLOwzJ4UNvwezIjAZFVA4CkqgH.iUBt1my",
+    "role": "editor",
+    "status": "active",
+    "createdAt": "2026-06-05T00:00:00.000Z",
+    "updatedAt": "2026-06-05T00:00:00.000Z"
+  }
+]

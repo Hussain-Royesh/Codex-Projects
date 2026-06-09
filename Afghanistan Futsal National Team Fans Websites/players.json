@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Jawad Safari",
+    "position": "Goalkeeper",
+    "jerseyNumber": 1,
+    "age": 25,
+    "height": "180 cm",
+    "photo": "images/Mohammad Jawad Safari.webp"
+  },
+  {
+    "name": "Mehran Ghulami",
+    "position": "Pivot",
+    "jerseyNumber": 6,
+    "age": 23,
+    "height": "176 cm",
+    "photo": "images/Mehran.webp"
+  },
+  {
+    "name": "Player Three",
+    "position": "Wing",
+    "jerseyNumber": 7,
+    "age": 23,
+    "height": "172 cm",
+    "photo": "images/player-placeholder.svg"
+  },
+  {
+    "name": "Player Four",
+    "position": "Pivot",
+    "jerseyNumber": 9,
+    "age": 26,
+    "height": "178 cm",
+    "photo": "images/player-placeholder.svg"
+  },
+  {
+    "name": "Player Five",
+    "position": "Universal",
+    "jerseyNumber": 10,
+    "age": 25,
+    "height": "174 cm",
+    "photo": "images/player-placeholder.svg"
+  },
+  {
+    "name": "Player Six",
+    "position": "Wing",
+    "jerseyNumber": 11,
+    "age": 22,
+    "height": "170 cm",
+    "photo": "images/player-placeholder.svg"
+  },
+  {
+    "name": "Player Seven",
+    "position": "Defender",
+    "jerseyNumber": 14,
+    "age": 28,
+    "height": "181 cm",
+    "photo": "images/player-placeholder.svg"
+  },
+  {
+    "name": "Player Eight",
+    "position": "Goalkeeper",
+    "jerseyNumber": 16,
+    "age": 21,
+    "height": "183 cm",
+    "photo": "images/player-placeholder.svg"
+  }
+]

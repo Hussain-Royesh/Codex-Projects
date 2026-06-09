@@ -1,0 +1,13 @@
+<svg width="1200" height="825" viewBox="0 0 1200 825" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Trophy Placeholder</title>
+  <desc id="desc">A premium trophy placeholder graphic.</desc>
+  <rect width="1200" height="825" fill="#090B10"/>
+  <path d="M153 0H1200V825H903L153 0Z" fill="#D11932" fill-opacity=".28"/>
+  <path d="M0 825V0H211L978 825H0Z" fill="#109A56" fill-opacity=".22"/>
+  <path d="M433 172H767V259C767 421 694 516 600 516C506 516 433 421 433 259V172Z" fill="#F2B84B"/>
+  <path d="M391 214H304C304 344 366 415 456 424" stroke="#F2B84B" stroke-width="34" stroke-linecap="round"/>
+  <path d="M809 214H896C896 344 834 415 744 424" stroke="#F2B84B" stroke-width="34" stroke-linecap="round"/>
+  <path d="M565 508H635V630H565V508Z" fill="#F2B84B"/>
+  <path d="M464 630H736L775 711H425L464 630Z" fill="#F2B84B"/>
+  <path d="M492 255H708" stroke="#F7F8F4" stroke-opacity=".72" stroke-width="18" stroke-linecap="round"/>
+</svg>

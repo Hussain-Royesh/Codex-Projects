@@ -1,0 +1,280 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Vazirmatn:wght@400;500;600;700;800;900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --page-bg: #020711;
+  --page-soft: #07111f;
+  --surface: rgba(255, 255, 255, 0.065);
+  --surface-strong: rgba(255, 255, 255, 0.11);
+  --line: rgba(255, 255, 255, 0.13);
+  --line-strong: rgba(255, 255, 255, 0.24);
+  --text: #f8fafc;
+  --muted: #a8b3c4;
+  --soft: #718096;
+  --red: #d7193f;
+  --green: #009b5a;
+  --gold: #f5c542;
+  --nav: rgba(2, 7, 17, 0.72);
+  --field-bg: rgba(255, 255, 255, 0.1);
+  --field-border: rgba(255, 255, 255, 0.2);
+  --field-text: #ffffff;
+  --field-placeholder: #8d9aab;
+  --panel-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+}
+
+:root[data-theme="light"] {
+  --page-bg: #f6f8fb;
+  --page-soft: #ffffff;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-strong: #ffffff;
+  --line: rgba(7, 17, 31, 0.14);
+  --line-strong: rgba(7, 17, 31, 0.26);
+  --text: #07111f;
+  --muted: #3f4e63;
+  --soft: #64748b;
+  --nav: rgba(255, 255, 255, 0.8);
+  --field-bg: #ffffff;
+  --field-border: #c7d0dc;
+  --field-text: #07111f;
+  --field-placeholder: #66758a;
+  --panel-shadow: 0 22px 58px rgba(7, 17, 31, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  color: var(--text);
+  background: var(--page-bg);
+  font-family: "Inter", "Vazirmatn", system-ui, sans-serif;
+  line-height: 1.6;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html[dir="rtl"] body {
+  font-family: "Vazirmatn", "Inter", system-ui, sans-serif;
+}
+
+html[dir="rtl"] {
+  text-align: right;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+::selection {
+  color: #ffffff;
+  background: var(--red);
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.site-bg {
+  background:
+    linear-gradient(180deg, rgba(2, 7, 17, 0.2), transparent 18rem),
+    var(--page-bg);
+}
+
+:root[data-theme="light"] .site-bg {
+  background: var(--page-bg);
+}
+
+.glass-panel {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  box-shadow: var(--panel-shadow);
+}
+
+.sport-card {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--panel-shadow);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.sport-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--line-strong);
+  background: var(--surface-strong);
+  box-shadow: var(--panel-shadow);
+}
+
+.eyebrow {
+  font-family: "Space Grotesk", "Vazirmatn", system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+html[dir="rtl"] .eyebrow {
+  text-transform: none;
+}
+
+.hero-scrim {
+  background:
+    linear-gradient(90deg, rgba(2, 7, 17, 0.94), rgba(2, 7, 17, 0.62) 48%, rgba(2, 7, 17, 0.4)),
+    linear-gradient(180deg, rgba(2, 7, 17, 0.2), rgba(2, 7, 17, 0.9));
+}
+
+html[dir="rtl"] .hero-scrim {
+  background:
+    linear-gradient(270deg, rgba(2, 7, 17, 0.94), rgba(2, 7, 17, 0.62) 48%, rgba(2, 7, 17, 0.4)),
+    linear-gradient(180deg, rgba(2, 7, 17, 0.2), rgba(2, 7, 17, 0.9));
+}
+
+.afghan-rail {
+  background: linear-gradient(90deg, #111 0 33%, var(--red) 33% 66%, var(--green) 66%);
+}
+
+.light-text {
+  color: var(--text);
+}
+
+.muted-text {
+  color: var(--muted);
+}
+
+.soft-text {
+  color: var(--soft);
+}
+
+.admin-panel,
+.admin-row {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--panel-shadow);
+}
+
+.admin-row {
+  background: color-mix(in srgb, var(--field-bg) 78%, transparent);
+}
+
+.field-label {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.field-control {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--field-border);
+  border-radius: 16px;
+  background: var(--field-bg);
+  color: var(--field-text);
+  padding: 0.7rem 0.95rem;
+  outline: none;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+
+.field-control::placeholder {
+  color: var(--field-placeholder);
+}
+
+.field-control:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 18%, transparent);
+}
+
+textarea.field-control {
+  min-height: 112px;
+  resize: vertical;
+}
+
+.action-primary,
+.action-secondary,
+.action-danger {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  padding: 0.58rem 0.95rem;
+  font-size: 0.88rem;
+  font-weight: 900;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.action-primary {
+  border: 1px solid transparent;
+  background: #ffffff;
+  color: #07111f;
+}
+
+:root[data-theme="light"] .action-primary {
+  background: #07111f;
+  color: #ffffff;
+}
+
+.action-secondary {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--field-bg) 70%, transparent);
+  color: var(--text);
+}
+
+.action-danger {
+  border: 1px solid color-mix(in srgb, var(--red) 46%, transparent);
+  background: color-mix(in srgb, var(--red) 12%, transparent);
+  color: var(--red);
+}
+
+.action-primary:hover,
+.action-secondary:hover,
+.action-danger:hover {
+  transform: translateY(-1px);
+}
+
+.tab-control {
+  color: var(--muted);
+}
+
+.tab-control-active {
+  background: var(--text);
+  color: var(--page-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

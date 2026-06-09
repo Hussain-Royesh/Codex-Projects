@@ -1,0 +1,18 @@
+<svg width="1200" height="825" viewBox="0 0 1200 825" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Fan Stand Placeholder</title>
+  <desc id="desc">A stylized fan stand placeholder graphic.</desc>
+  <rect width="1200" height="825" fill="#090B10"/>
+  <path d="M0 166H1200V825H0V166Z" fill="#111821"/>
+  <path d="M0 0H1200V240H0V0Z" fill="#D11932" fill-opacity=".35"/>
+  <path d="M0 585H1200V825H0V585Z" fill="#109A56" fill-opacity=".35"/>
+  <g fill="#F7F8F4" fill-opacity=".82">
+    <circle cx="186" cy="362" r="42"/><circle cx="340" cy="342" r="42"/><circle cx="494" cy="362" r="42"/><circle cx="648" cy="342" r="42"/><circle cx="802" cy="362" r="42"/><circle cx="956" cy="342" r="42"/>
+    <path d="M116 532C126 438 155 396 186 396C217 396 246 438 256 532H116Z"/>
+    <path d="M270 512C280 418 309 376 340 376C371 376 400 418 410 512H270Z"/>
+    <path d="M424 532C434 438 463 396 494 396C525 396 554 438 564 532H424Z"/>
+    <path d="M578 512C588 418 617 376 648 376C679 376 708 418 718 512H578Z"/>
+    <path d="M732 532C742 438 771 396 802 396C833 396 862 438 872 532H732Z"/>
+    <path d="M886 512C896 418 925 376 956 376C987 376 1016 418 1026 512H886Z"/>
+  </g>
+  <path d="M138 634H1062" stroke="#F2B84B" stroke-width="16" stroke-linecap="round"/>
+</svg>

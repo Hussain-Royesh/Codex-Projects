@@ -1,0 +1,13 @@
+<svg width="1200" height="825" viewBox="0 0 1200 825" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Futsal Court Placeholder</title>
+  <desc id="desc">A stylized futsal court placeholder with Afghanistan-inspired accents.</desc>
+  <rect width="1200" height="825" fill="#080A0F"/>
+  <rect x="80" y="86" width="1040" height="653" rx="8" fill="#151B24" stroke="#F7F8F4" stroke-opacity=".4" stroke-width="6"/>
+  <path d="M600 86V739" stroke="#F7F8F4" stroke-opacity=".34" stroke-width="6"/>
+  <circle cx="600" cy="413" r="94" stroke="#F7F8F4" stroke-opacity=".36" stroke-width="6"/>
+  <rect x="80" y="268" width="166" height="290" stroke="#D11932" stroke-opacity=".75" stroke-width="8"/>
+  <rect x="954" y="268" width="166" height="290" stroke="#109A56" stroke-opacity=".75" stroke-width="8"/>
+  <path d="M0 0H1200V116L0 825V0Z" fill="#D11932" fill-opacity=".22"/>
+  <path d="M1200 825H0V718L1200 0V825Z" fill="#109A56" fill-opacity=".2"/>
+  <circle cx="600" cy="413" r="22" fill="#F2B84B"/>
+</svg>

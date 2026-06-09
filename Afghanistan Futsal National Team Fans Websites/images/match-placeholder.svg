@@ -1,0 +1,12 @@
+<svg width="1200" height="825" viewBox="0 0 1200 825" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Match Night Placeholder</title>
+  <desc id="desc">A stylized match-night placeholder graphic.</desc>
+  <rect width="1200" height="825" fill="#080A0F"/>
+  <path d="M91 142H1109V683H91V142Z" fill="#121821" stroke="#F7F8F4" stroke-opacity=".24" stroke-width="6"/>
+  <path d="M91 142H1109V252H91V142Z" fill="#D11932" fill-opacity=".36"/>
+  <path d="M91 573H1109V683H91V573Z" fill="#109A56" fill-opacity=".36"/>
+  <circle cx="600" cy="413" r="118" stroke="#F2B84B" stroke-width="12"/>
+  <path d="M395 344H461V481H395V344Z" fill="#F7F8F4" fill-opacity=".9"/>
+  <path d="M739 344H805V481H739V344Z" fill="#F7F8F4" fill-opacity=".9"/>
+  <path d="M428 413H772" stroke="#F7F8F4" stroke-opacity=".72" stroke-width="14" stroke-linecap="round"/>
+</svg>

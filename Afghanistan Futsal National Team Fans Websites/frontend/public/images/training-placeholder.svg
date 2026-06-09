@@ -1,0 +1,12 @@
+<svg width="1200" height="825" viewBox="0 0 1200 825" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Training Placeholder</title>
+  <desc id="desc">A stylized futsal training placeholder graphic.</desc>
+  <rect width="1200" height="825" fill="#090B10"/>
+  <rect x="112" y="126" width="976" height="573" rx="8" fill="#121922" stroke="#F7F8F4" stroke-opacity=".3" stroke-width="6"/>
+  <path d="M240 524L363 340L508 520L681 287L960 584" stroke="#F2B84B" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="363" cy="340" r="33" fill="#D11932"/>
+  <circle cx="681" cy="287" r="33" fill="#109A56"/>
+  <circle cx="960" cy="584" r="33" fill="#F7F8F4"/>
+  <path d="M0 0H1200V112L0 825V0Z" fill="#D11932" fill-opacity=".18"/>
+  <path d="M1200 825H0V706L1200 0V825Z" fill="#109A56" fill-opacity=".18"/>
+</svg>

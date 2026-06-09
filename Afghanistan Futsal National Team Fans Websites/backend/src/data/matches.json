@@ -1,0 +1,46 @@
+[
+  {
+    "id": "m-1",
+    "date": "2026-06-21",
+    "time": "19:00",
+    "homeTeam": "Afghanistan",
+    "awayTeam": "Thailand",
+    "competition": "International Futsal Friendly",
+    "venue": "Venue TBA",
+    "status": "Upcoming",
+    "note": "Preparation match with final venue details to be confirmed."
+  },
+  {
+    "id": "m-2",
+    "date": "2026-07-05",
+    "time": "20:30",
+    "homeTeam": "Afghanistan",
+    "awayTeam": "Russia",
+    "competition": "Regional Preparation Match",
+    "venue": "Indoor Arena TBA",
+    "status": "TBA",
+    "note": "Kickoff and ticket information will be updated after confirmation."
+  },
+  {
+    "id": "m-3",
+    "date": "2026-07-19",
+    "time": "18:00",
+    "homeTeam": "Afghanistan",
+    "awayTeam": "Vietnam",
+    "competition": "Continental Warm-Up",
+    "venue": "Neutral Venue TBA",
+    "status": "Upcoming",
+    "note": "High-tempo test against a strong regional futsal opponent."
+  },
+  {
+    "id": "m-c5cb56a7-83ff-43e5-9136-571a9504cf82",
+    "date": "2026-06-26",
+    "time": "18:35",
+    "homeTeam": "Afghanistan",
+    "awayTeam": "Nivma",
+    "competition": "Friendly match",
+    "venue": "Kabul Futsal Fedration",
+    "status": "Upcoming",
+    "note": "Ticket is required"
+  }
+]
